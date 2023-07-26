@@ -1,0 +1,1 @@
+Fazer template matching da imagem q.jpg (urso) na imagem a.jpg e colocar pontos vermelhos nas ocorrências.

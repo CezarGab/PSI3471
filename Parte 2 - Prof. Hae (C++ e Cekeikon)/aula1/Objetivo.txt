@@ -1,0 +1,1 @@
+Filtrar o ruído branco da imagem "Mickey.bmp"

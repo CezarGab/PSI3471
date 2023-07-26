@@ -1,0 +1,42 @@
+// grad-2017 flann.cpp
+// Usa OpenCV2
+#include <cekeikon.h>
+int main()
+{
+    Mat_<GRY> ax;
+    le(ax, "janei.pgm");
+    Mat_<GRY> ay;
+    le(ay, "janei-1.pgm");
+    Mat_<GRY> qx;
+    le(qx, "julho.pgm");
+    if (ax.size() != ay.size())
+        erro("Erro dimensao");
+    Mat_<GRY> qp(qx.rows, qx.cols);
+
+    // Cria as estruturas de dados para alimentar OpenCV
+    Mat_<FLT> features(ax.rows * ax.cols, 3);
+    Mat_<FLT> saidas(ax.rows * ax.cols, 1);
+    int i = 0;
+    for (int l = 0; l < ax.rows; l++)
+        for (int c = 0; c < ax.cols; c++)
+        {
+            features(i) = ax(l, c) / 255.0;
+            saidas(i) = ay(l, c) / 255.0;
+            i = i + 1;
+        }
+    flann::Index ind(features, flann::KDTreeIndexParams(4));
+    // Aqui, as 4 arvores estao criadas
+    Mat_<FLT> query(1, 1);
+    vector<int> indices(1);
+    vector<FLT> dists(1);
+    for (int l = 0; l < qp.rows; l++)
+        for (int c = 0; c < qp.cols; c++)
+        {
+            query(0) = qx(l, c) / 255.0;
+            // Zero indica sem backtracking
+            ind.knnSearch(query, indices, dists, 1, flann::SearchParams(0));
+            // Saida e' um numero entre 0 e 255
+            qp(l, c) = 255 * saidas(indices[0]);
+        }
+    imp(qp, "julho-p1.pgm");
+}

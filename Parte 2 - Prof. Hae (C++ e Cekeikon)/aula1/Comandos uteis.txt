@@ -1,0 +1,1 @@
+compila eliminaruido.cpp -cek && eliminaruido.exe
